@@ -131,10 +131,6 @@ exporters:
     tls:
       insecure: true
 
-  
-logging:
-    loglevel: debug  # Options: info, debug, warn, error
-
 
 connectors:
   spanmetrics:
