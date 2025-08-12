@@ -120,36 +120,9 @@ receivers:
 exporters:
   debug:
   otlp:
-    endpoint: "jaeger:4317"
+    endpoint: "172.31.15.80:4317"
     tls:
       insecure: true
-  otlphttp/prometheus:
-    endpoint: "http://prometheus:9090/api/v1/otlp"
-    tls:
-      insecure: true
-  opensearch:
-    logs_index: otel-logs
-    logs_index_time_format: "yyyy-MM-dd"
-    http:
-      endpoint: "http://opensearch:9200"
-      tls:
-        insecure: true
-processors:
-  batch:
-  memory_limiter:
-    check_interval: 5s
-    limit_percentage: 80
-    spike_limit_percentage: 25
-  resourcedetection:
-    detectors: [env, docker, system]
-  transform:
-    error_mode: ignore
-    trace_statements:
-      - context: span
-        statements:
-          # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
-          - replace_pattern(name, "\\?.*", "")
-          - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
 
 connectors:
   spanmetrics:
