@@ -118,11 +118,17 @@ receivers:
           system.uptime:
             enabled: true
 exporters:
-  debug:
+  logging:
+    loglevel: debug  # Options: info, debug, warn, error
   otlp:
     endpoint: "172.31.15.80:4317"
     tls:
       insecure: true
+
+  
+logging:
+    loglevel: debug  # Options: info, debug, warn, error
+
 
 connectors:
   spanmetrics:
@@ -132,15 +138,15 @@ service:
     traces:
       receivers: [otlp]
       processors: [resourcedetection, memory_limiter, transform, batch]
-      exporters: [otlp, debug, spanmetrics]
+      exporters: [otlp, debug, spanmetrics, logging]
     metrics:
       receivers: [docker_stats, httpcheck/frontend-proxy, hostmetrics, nginx, otlp, postgresql, redis, spanmetrics]
       processors: [resourcedetection, memory_limiter, batch]
-      exporters: [otlphttp/prometheus, debug]
+      exporters: [otlphttp/prometheus, debug, logging]
     logs:
       receivers: [otlp]
       processors: [resourcedetection, memory_limiter, batch]
-      exporters: [opensearch, debug]
+      exporters: [opensearch, debug, logging]
   telemetry:
     metrics:
       level: detailed
