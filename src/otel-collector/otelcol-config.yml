@@ -120,8 +120,14 @@ receivers:
 exporters:
   logging:
     loglevel: debug  # Options: info, debug, warn, error
-  otlp:
+
+  otlp_grpc:
     endpoint: "172.31.15.80:4317"
+    tls:
+      insecure: true
+
+  otlp_http:
+    endpoint: "http://172.31.15.80:4318"
     tls:
       insecure: true
 
@@ -138,15 +144,15 @@ service:
     traces:
       receivers: [otlp]
       processors: [resourcedetection, memory_limiter, transform, batch]
-      exporters: [otlp, debug, spanmetrics, logging]
+      exporters: [otlp_grpc, otlp_http, debug, spanmetrics, logging]
     metrics:
       receivers: [docker_stats, httpcheck/frontend-proxy, hostmetrics, nginx, otlp, postgresql, redis, spanmetrics]
       processors: [resourcedetection, memory_limiter, batch]
-      exporters: [otlphttp/prometheus, debug, logging]
+      exporters: [otlp_grpc, otlp_http, otlphttp/prometheus, debug, logging]
     logs:
       receivers: [otlp]
       processors: [resourcedetection, memory_limiter, batch]
-      exporters: [opensearch, debug, logging]
+      exporters: [otlp_grpc, otlp_http, opensearch, debug, logging]
   telemetry:
     metrics:
       level: detailed
