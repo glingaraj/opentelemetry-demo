@@ -118,15 +118,18 @@ receivers:
           system.uptime:
             enabled: true
 exporters:
-  logging:
-    loglevel: debug  # Options: info, debug, warn, error
-    
   otlp:
-    protocols:
-      grpc:
-        endpoint: "172.31.15.80:4317"
-      http:
-        endpoint: "172.31.15.80:4318"
+    endpoint: "172.31.15.80:4317"
+    tls:
+      insecure: true
+      insecure_skip_verify: true
+
+  otlphttp:
+    endpoint: "http://172.31.15.80:4318"
+    tls:
+      insecure: true
+      insecure_skip_verify: true
+
 
 connectors:
   spanmetrics:
@@ -136,15 +139,15 @@ service:
     traces:
       receivers: [otlp]
       processors: [resourcedetection, memory_limiter, transform, batch]
-      exporters: [otlp, logging]
+      exporters: [otlp, otlphttp, logging]
     metrics:
       receivers: [docker_stats, httpcheck/frontend-proxy, hostmetrics, nginx, otlp, postgresql, redis, spanmetrics]
       processors: [resourcedetection, memory_limiter, batch]
-      exporters: [otlp, logging]
+      exporters: [otlp, otlphttp, logging]
     logs:
       receivers: [otlp]
       processors: [resourcedetection, memory_limiter, batch]
-      exporters: [otlp, logging]
+      exporters: [otlp, otlphttp, logging]
   telemetry:
     metrics:
       level: detailed
