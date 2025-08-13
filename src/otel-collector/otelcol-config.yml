@@ -120,20 +120,13 @@ receivers:
 exporters:
   logging:
     loglevel: debug  # Options: info, debug, warn, error
-
+    
   otlp:
     protocols:
       grpc:
         endpoint: "172.31.15.80:4317"
-        tls:
-          insecure: true
-          insecure_skip_verify: true
       http:
-        endpoint: "http://172.31.15.80:4318"
-        tls:
-          insecure: true
-          insecure_skip_verify: true
-
+        endpoint: "172.31.15.80:4318"
 
 connectors:
   spanmetrics:
