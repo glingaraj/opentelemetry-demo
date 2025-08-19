@@ -767,8 +767,6 @@ services:
     depends_on:
       jaeger:
         condition: service_started
-      opensearch:
-        condition: service_healthy
     logging: *logging
     environment:
       - FRONTEND_PROXY_ADDR
