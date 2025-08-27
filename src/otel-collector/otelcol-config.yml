@@ -152,13 +152,6 @@ processors:
         statements:
           - set(attributes["userId"], Regex_Extract(body, "userId=(\\S+?),", 1))
           - set(attributes["userId"], Hash(attributes["userId"]))
-          
-
-
-  attributes/hash_details:
-    actions:
-      - key: entity.name
-        action: hash
 
         
 connectors:
@@ -185,7 +178,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [resourcedetection, memory_limiter, batch, attributes/hash_details]
+      processors: [resourcedetection, memory_limiter, batch, transform]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
