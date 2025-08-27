@@ -177,7 +177,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [resourcedetection, memory_limiter, batch, attributes/extract_userid, attributes/hash_userid]
+      processors: [resourcedetection, memory_limiter, batch, attributes/hash_details]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
