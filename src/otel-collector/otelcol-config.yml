@@ -146,12 +146,12 @@ processors:
           # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
           - replace_pattern(name, "\\?.*", "")
           - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
-  transform_hash_entity_name:
-    type: transform
-    log_statements:
-      - context: log
-        statements:
-          - set(log.attributes["entity.name"], SHA256(log.attributes["entity.name"]))
+  
+  attributes/hash_entity_name:
+    actions:
+      - key: entity.name
+        action: update
+        value: SHA256(entity.name)
         
 
         
@@ -179,7 +179,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [transform_hash_entity_name]
+      processors: [attributes/hash_entity_name]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
