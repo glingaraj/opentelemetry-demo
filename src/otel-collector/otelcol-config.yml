@@ -148,6 +148,7 @@ processors:
           - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")      
 
   transform/hash_entity_name:
+    type: transform
     log_statements:
       - context: log
         statements:
