@@ -149,7 +149,7 @@ processors:
 
   attributes/hash_details:
     actions:
-      - key: message
+      - key: entity.name
         action: hash
 
         
