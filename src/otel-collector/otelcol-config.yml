@@ -147,13 +147,11 @@ processors:
           - replace_pattern(name, "\\?.*", "")
           - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")      
 
-  attributes/hash_details:
-    actions:
-      - key: entity.name
-        action: hash
-        hash:
-          algorithm: sha256 # SHA256, SHA1, MD5
-          salt: "entitySalt987" # optional
+  transform/hash_entity_name:
+    log_statements:
+      - context: log
+        statements:
+          - set(attributes.entity.name, hash(attributes.entity.name, "sha256"))
         
 
         
@@ -181,7 +179,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [resourcedetection, memory_limiter, batch, attributes/hash_details]
+      processors: [transform/hash_entity_name]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
