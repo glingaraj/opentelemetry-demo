@@ -145,13 +145,18 @@ processors:
         statements:
           # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
           - replace_pattern(name, "\\?.*", "")
-          - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
-    
-    log_statements:
-      - context: log
-        statements:
-          - set(attributes["userId"], regex_extract(body, "userId=(\\S+?)", 1))
-          - set(attributes["userId"], hash(attributes["userId"]))
+          - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")      
+
+  attributes/hash_details:
+    actions:
+      - key: entity.name
+        action: hash
+        hash:
+        algorithm: sha256 # SHA256, SHA1, MD5
+        salt: "entitySalt987" # optional
+        iterations: 1000 # optional, default is 1
+        encoding: hex # hex or base64
+
 
         
 connectors:
@@ -178,7 +183,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [resourcedetection, memory_limiter, batch, transform]
+      processors: [resourcedetection, memory_limiter, batch, attributes/hash_details]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
