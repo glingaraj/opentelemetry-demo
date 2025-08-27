@@ -150,7 +150,14 @@ processors:
       - context: log
         statements:
           - set(attributes["userId"], Regexp_Extract(body, "userId=(\\S+?)", 1))
-  
+      
+  attributes/extract_userid:
+    actions:
+      - action: extract
+        key: userId
+        from_attribue: body
+        regex: 'userId=(\\S+)'
+
   attributes/hash_userid:
     actions:
       - key: userId
@@ -180,7 +187,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [resourcedetection, memory_limiter, batch, transform, attributes/hash_userid]
+      processors: [resourcedetection, memory_limiter, batch, attributes/extract_userid, attributes/hash_userid]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
