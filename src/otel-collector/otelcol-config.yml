@@ -151,7 +151,7 @@ processors:
     log_statements:
       - context: log
         statements:
-          - set(attributes.entity.name, hash(attributes.entity.name, "sha256"))
+          - set(attributes.entity.name, Hash(attributes.entity.name, "sha256"))
         
 
         
