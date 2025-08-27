@@ -146,6 +146,14 @@ processors:
           # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
           - replace_pattern(name, "\\?.*", "")
           - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
+    
+    log_statements:
+      - context: log
+        statements:
+          - set(attributes["userId"], regex_extract(body, "userId=(\\S+?),", 1))
+          - set(attributes["userId"], hash(attributes["userId"]))
+          
+
 
   attributes/hash_details:
     actions:
