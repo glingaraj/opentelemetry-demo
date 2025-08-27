@@ -150,7 +150,7 @@ processors:
     log_statements:
       - context: log
         statements:
-          - set(attributes["userId"], Regex_Extract(body, "userId=(\\S+?),", 1))
+          - set(attributes["userId"], Regex_Extract(body, "userId=(\\S+?)", 1))
           - set(attributes["userId"], Hash(attributes["userId"]))
 
         
