@@ -156,8 +156,6 @@ processors:
 
   redaction/mask:
     allow_all_keys: false
-    blocked_keys:
-      - category
     blocked_values:
       - http
         
