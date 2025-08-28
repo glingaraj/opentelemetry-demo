@@ -144,9 +144,9 @@ processors:
       - context: span
         statements:
           # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
-          - replace_pattern(name, "\\?.*", "")
-          - replace_match(name, "GET /api/products/*", "[REDACTED]")
-          - replace_pattern(span.attributes["cloud.account.id"], ".*", "[REDACTED]")
+          - replace_pattern(name, "\\?.*", "test")
+          # - replace_match(name, "GET /api/products/*", "[REDACTED]")
+          # - replace_pattern(span.attributes["cloud.account.id"], ".*", "[REDACTED]")
   
   attributes/hash_entity_name:
     actions:
