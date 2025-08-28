@@ -171,7 +171,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [resourcedetection, memory_limiter, transform, batch]
+      processors: [resourcedetection, memory_limiter, transform, batch, attributes/hash_entity_name]
       exporters: [otlp, otlphttp, spanmetrics]
     metrics:
       receivers: [docker_stats, httpcheck/frontend-proxy, hostmetrics, nginx, otlp, postgresql, redis, spanmetrics]
@@ -179,7 +179,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [attributes/hash_entity_name]
+      processors: [batch]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
