@@ -155,7 +155,7 @@ processors:
         value: SHA256(entity.name)
 
   redaction/mask:
-    allow_all_keys: false
+    allow_all_keys: true
     blocked_values:
       - http
         
