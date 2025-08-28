@@ -155,14 +155,15 @@ processors:
         value: SHA256(entity.name)
 
   redaction/mask:
-    allow_all_keys: true
+    allow_all_keys: false
+    allowed_keys:
+      - category
     blocked_values:
       - http
         
 
         
-connectors:
-  spanmetrics:
+
 
 extensions:
   health_check:
@@ -180,7 +181,7 @@ service:
       processors: [resourcedetection, memory_limiter, transform, batch, attributes/hash_entity_name, redaction/mask]
       exporters: [otlp, otlphttp]
     metrics:
-      receivers: [docker_stats, httpcheck/frontend-proxy, hostmetrics, nginx, otlp, postgresql, redis, spanmetrics]
+      receivers: [docker_stats, httpcheck/frontend-proxy, hostmetrics, nginx, otlp, postgresql, redis]
       processors: [resourcedetection, memory_limiter, batch]
       exporters: [otlp, otlphttp]
     logs:
