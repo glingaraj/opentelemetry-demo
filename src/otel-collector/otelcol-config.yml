@@ -153,6 +153,13 @@ processors:
       - key: entity.name
         action: update
         value: SHA256(entity.name)
+
+  redaction/mask:
+    allow_all_keys: false
+    blocked_keys:
+      - category
+    blocked_values:
+      - http
         
 
         
@@ -172,7 +179,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [resourcedetection, memory_limiter, transform, batch, attributes/hash_entity_name]
+      processors: [resourcedetection, memory_limiter, transform, batch, attributes/hash_entity_name, redaction/mask]
       exporters: [otlp, otlphttp, spanmetrics]
     metrics:
       receivers: [docker_stats, httpcheck/frontend-proxy, hostmetrics, nginx, otlp, postgresql, redis, spanmetrics]
