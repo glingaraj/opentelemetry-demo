@@ -140,6 +140,10 @@ processors:
     detectors: [env, docker, system]
   transform:
     error_mode: ignore
+    span_statements:
+      - context: span
+      statements:
+        - set(attributes["category"], nil) # Redaction
     # trace_statements:
     #   - context: span
     #     statements:
@@ -148,29 +152,24 @@ processors:
     #       # - replace_pattern(name, "\\?.*", "")
     #       # - replace_match(name, "GET /api/products/*", "[REDACTED]")
     #       # - replace_pattern(span.attributes["cloud.account.id"], ".*", "[REDACTED]") 
-
-    span_statements:
-      - context: span
-        statements:
-          - set(attributes["category"], nil) # Redaction
-          # - set(attributes["id"], "REDACTED") # Replacement
-          # - set(attributes["id"], SHA256(attributes["id"])) # Hashing
-
-
+    # span_statements:
+    #   - context: span
+    #     statements:
+    #       - set(attributes["category"], nil) # Redaction
+    #       # - set(attributes["id"], "REDACTED") # Replacement
+    #       # - set(attributes["id"], SHA256(attributes["id"])) # Hashing
     # span_statements:
     #   - context: span
     #     statements:
     #       - delete(attributes["category"])
     #       - set(attributes["id"], "REDACTED")
     #       - set(attributes["name"], hash(attributes["name"], "sha256"))
-
     # metric_statements:
     #   - context: datapoint
     #     statements:
     #       - delete(attributes["category"])
     #       - set(attributes["id"], "REDACTED")
     #       - set(attributes["name"], hash(attributes["name"], "sha256"))
-
 extensions:
   health_check:
     endpoint: 0.0.0.0:13133
