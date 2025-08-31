@@ -132,6 +132,7 @@ exporters:
 
 
 processors:
+  batch:
   filter/drop_frontend_proxy:
     logs:
       log_record:
@@ -150,11 +151,11 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [resourcedetection, memory_limiter, transform]
+      processors: [batch]
       exporters: [otlp, otlphttp]
     metrics:
       receivers: [docker_stats, httpcheck/frontend-proxy, hostmetrics, nginx, otlp, postgresql, redis]
-      processors: [resourcedetection, memory_limiter, batch]
+      processors: [batch]
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
