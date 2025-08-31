@@ -140,12 +140,13 @@ processors:
     detectors: [env, docker, system]
   transform:
     error_mode: ignore
-    span_statements:
-      - context: span
+    log_statements:
+      - context: log
         statements:
-          - set(attributes["category"], nil) # Redaction
-    # trace_statements:
-    #   - context: span
+          - set(attributes["id"], nil) # Redaction
+          - set(attributes["host.name"], "REDACTED") # Replacement
+    # log_statements:
+    #   - context: log
     #     statements:
     #       # # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
     #       - replace_pattern(name, ".*", "")
