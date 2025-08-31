@@ -152,9 +152,10 @@ processors:
     log_statements:
       - context: log
         statements:
-          - delete(attributes["category"])
-          - set(attributes["id"], "REDACTED")
-          - set(attributes["name"], Hash(attributes["name"], "sha256"))
+          - set(attributes["category"], nil) # Redaction
+          - set(attributes["id"], "REDACTED") # Replacement
+          - set(attributes["name"], SHA256(attributes["name"])) # Hashing
+
 
     # span_statements:
     #   - context: span
