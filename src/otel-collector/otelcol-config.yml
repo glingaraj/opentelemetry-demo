@@ -131,12 +131,14 @@ exporters:
       insecure_skip_verify: true
 
 
-processors:
-  batch:
-  filter/drop_frontend_proxy:
-    logs:
-      log_record:
-        - 'resource.attributes["service.name"] == "frontend-proxy"'
+transform:
+    error_mode: ignore
+    log_statements:
+      - context: log
+        statements:
+          - set(attributes["id"], nil) # Redaction
+          - set(attributes["host.name"], "REDACTED") # Replacement
+
 
 extensions:
   health_check:
