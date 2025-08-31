@@ -140,30 +140,39 @@ processors:
     detectors: [env, docker, system]
   transform:
     error_mode: ignore
-    trace_statements:
-      - context: span
-        statements:
-          # # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
-          - replace_pattern(name, ".*", "")
-          # - replace_pattern(name, "\\?.*", "")
-          # - replace_match(name, "GET /api/products/*", "[REDACTED]")
-          # - replace_pattern(span.attributes["cloud.account.id"], ".*", "[REDACTED]")
+    # trace_statements:
+    #   - context: span
+    #     statements:
+    #       # # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
+    #       - replace_pattern(name, ".*", "")
+    #       # - replace_pattern(name, "\\?.*", "")
+    #       # - replace_match(name, "GET /api/products/*", "[REDACTED]")
+    #       # - replace_pattern(span.attributes["cloud.account.id"], ".*", "[REDACTED]")
+
   
-  attributes/hash_entity_name:
-    actions:
-      - key: name
-        action: hash
+    log_statements:
+      - context: log
+      statements:
+        - delete(attributes["category"]) # Redaction
+        - set(attributes["id"], "REDACTED") # Replacement
+        - set(attributes["name"], hash(attributes["name"], "sha256")) # Hashing
+        # - set(attributes["user.phone"], concat("XXXX-XXXX-", substring(attributes["user.phone"], length(attributes["user.phone"]) - 4, 4))) # Partial Masking
 
-  # redaction/mask:
-  #   allow_all_keys: false
-  #   allowed_keys:
-  #     - category
-  #   blocked_values:
-  #     - http
-        
+    span_statements:
+      - context: span
+      statements:
+        - delete(attributes["category"])
+        - set(attributes["id"], "REDACTED")
+        - set(attributes["name"], hash(attributes["name"], "sha256"))
+        # - set(attributes["user.phone"], concat("XXXX-XXXX-", substring(attributes["user.phone"], length(attributes["user.phone"]) - 4, 4)))
 
-        
-
+    metric_statements:
+      - context: datapoint
+      statements:
+        - delete(attributes["category"])
+        - set(attributes["id"], "REDACTED")
+        - set(attributes["name"], hash(attributes["name"], "sha256"))
+        # - set(attributes["user.phone"], concat("XXXX-XXXX-", substring(attributes["user.phone"], length(attributes["user.phone"]) - 4, 4)))
 
 extensions:
   health_check:
