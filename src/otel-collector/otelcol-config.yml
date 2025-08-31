@@ -130,46 +130,13 @@ exporters:
       insecure: true
       insecure_skip_verify: true
 
+
 processors:
-  batch:
-  memory_limiter:
-    check_interval: 5s
-    limit_percentage: 80
-    spike_limit_percentage: 25
-  resourcedetection:
-    detectors: [env, docker, system]
-  transform:
-    error_mode: ignore
-    log_statements:
-      - context: log
-        statements:
-          - set(attributes["host.name"], "REDACTED") # Replacement
-    # log_statements:
-    #   - context: log
-    #     statements:
-    #       # # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
-    #       - replace_pattern(name, ".*", "")
-    #       # - replace_pattern(name, "\\?.*", "")
-    #       # - replace_match(name, "GET /api/products/*", "[REDACTED]")
-    #       # - replace_pattern(span.attributes["cloud.account.id"], ".*", "[REDACTED]") 
-    # span_statements:
-    #   - context: span
-    #     statements:
-    #       - set(attributes["category"], nil) # Redaction
-    #       # - set(attributes["id"], "REDACTED") # Replacement
-    #       # - set(attributes["id"], SHA256(attributes["id"])) # Hashing
-    # span_statements:
-    #   - context: span
-    #     statements:
-    #       - delete(attributes["category"])
-    #       - set(attributes["id"], "REDACTED")
-    #       - set(attributes["name"], hash(attributes["name"], "sha256"))
-    # metric_statements:
-    #   - context: datapoint
-    #     statements:
-    #       - delete(attributes["category"])
-    #       - set(attributes["id"], "REDACTED")
-    #       - set(attributes["name"], hash(attributes["name"], "sha256"))
+  filter/drop_frontend_proxy:
+    logs:
+      log_record:
+        - 'resource.attributes["service.name"] == "frontend-proxy"'
+
 extensions:
   health_check:
     endpoint: 0.0.0.0:13133
@@ -191,7 +158,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [transform]
+      processors: [filter/drop_frontend_proxy]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
