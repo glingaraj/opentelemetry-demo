@@ -143,7 +143,6 @@ processors:
     log_statements:
       - context: log
         statements:
-          # - set(attributes["id"], nil) # Redaction
           - set(attributes["host.name"], "REDACTED") # Replacement
     # log_statements:
     #   - context: log
