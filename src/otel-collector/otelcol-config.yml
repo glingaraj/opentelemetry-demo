@@ -147,16 +147,14 @@ processors:
     #       - replace_pattern(name, ".*", "")
     #       # - replace_pattern(name, "\\?.*", "")
     #       # - replace_match(name, "GET /api/products/*", "[REDACTED]")
-    #       # - replace_pattern(span.attributes["cloud.account.id"], ".*", "[REDACTED]")
+    #       # - replace_pattern(span.attributes["cloud.account.id"], ".*", "[REDACTED]") 
 
-  
     log_statements:
       - context: log
         statements:
-          - delete(attributes["category"]) # Redaction
-          - set(attributes["id"], "REDACTED") # Replacement
-          - set(attributes["name"], hash(attributes["name"], "sha256")) # Hashing
-        # - set(attributes["user.phone"], concat("XXXX-XXXX-", substring(attributes["user.phone"], length(attributes["user.phone"]) - 4, 4))) # Partial Masking
+          - delete(attributes["category"])
+          - set(attributes["id"], "REDACTED")
+          - set(attributes["name"], hash(attributes["name"], "sha256"))
 
     span_statements:
       - context: span
@@ -164,7 +162,6 @@ processors:
           - delete(attributes["category"])
           - set(attributes["id"], "REDACTED")
           - set(attributes["name"], hash(attributes["name"], "sha256"))
-        # - set(attributes["user.phone"], concat("XXXX-XXXX-", substring(attributes["user.phone"], length(attributes["user.phone"]) - 4, 4)))
 
     metric_statements:
       - context: datapoint
@@ -172,7 +169,6 @@ processors:
           - delete(attributes["category"])
           - set(attributes["id"], "REDACTED")
           - set(attributes["name"], hash(attributes["name"], "sha256"))
-        # - set(attributes["user.phone"], concat("XXXX-XXXX-", substring(attributes["user.phone"], length(attributes["user.phone"]) - 4, 4)))
 
 extensions:
   health_check:
