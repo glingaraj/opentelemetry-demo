@@ -161,7 +161,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [filter/drop_frontend_proxy]
+      processors: [transform]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
