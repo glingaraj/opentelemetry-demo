@@ -149,12 +149,12 @@ processors:
     #       # - replace_match(name, "GET /api/products/*", "[REDACTED]")
     #       # - replace_pattern(span.attributes["cloud.account.id"], ".*", "[REDACTED]") 
 
-    log_statements:
-      - context: log
-        statements:
-          - delete(attributes["category"])
-          - set(attributes["id"], "REDACTED")
-          - set(attributes["name"], hash(attributes["name"], "sha256"))
+    # log_statements:
+    #   - context: log
+    #     statements:
+    #       - delete(attributes["category"])
+    #       - set(attributes["id"], "REDACTED")
+    #       - set(attributes["name"], hash(attributes["name"], "sha256"))
 
     span_statements:
       - context: span
@@ -163,12 +163,12 @@ processors:
           - set(attributes["id"], "REDACTED")
           - set(attributes["name"], hash(attributes["name"], "sha256"))
 
-    metric_statements:
-      - context: datapoint
-        statements:
-          - delete(attributes["category"])
-          - set(attributes["id"], "REDACTED")
-          - set(attributes["name"], hash(attributes["name"], "sha256"))
+    # metric_statements:
+    #   - context: datapoint
+    #     statements:
+    #       - delete(attributes["category"])
+    #       - set(attributes["id"], "REDACTED")
+    #       - set(attributes["name"], hash(attributes["name"], "sha256"))
 
 extensions:
   health_check:
