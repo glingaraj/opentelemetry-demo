@@ -142,8 +142,8 @@ processors:
     error_mode: ignore
     span_statements:
       - context: span
-      statements:
-        - set(attributes["category"], nil) # Redaction
+        statements:
+          - set(attributes["category"], nil) # Redaction
     # trace_statements:
     #   - context: span
     #     statements:
