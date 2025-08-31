@@ -152,26 +152,26 @@ processors:
   
     log_statements:
       - context: log
-      statements:
-        - delete(attributes["category"]) # Redaction
-        - set(attributes["id"], "REDACTED") # Replacement
-        - set(attributes["name"], hash(attributes["name"], "sha256")) # Hashing
+        statements:
+          - delete(attributes["category"]) # Redaction
+          - set(attributes["id"], "REDACTED") # Replacement
+          - set(attributes["name"], hash(attributes["name"], "sha256")) # Hashing
         # - set(attributes["user.phone"], concat("XXXX-XXXX-", substring(attributes["user.phone"], length(attributes["user.phone"]) - 4, 4))) # Partial Masking
 
     span_statements:
       - context: span
-      statements:
-        - delete(attributes["category"])
-        - set(attributes["id"], "REDACTED")
-        - set(attributes["name"], hash(attributes["name"], "sha256"))
+        statements:
+          - delete(attributes["category"])
+          - set(attributes["id"], "REDACTED")
+          - set(attributes["name"], hash(attributes["name"], "sha256"))
         # - set(attributes["user.phone"], concat("XXXX-XXXX-", substring(attributes["user.phone"], length(attributes["user.phone"]) - 4, 4)))
 
     metric_statements:
       - context: datapoint
-      statements:
-        - delete(attributes["category"])
-        - set(attributes["id"], "REDACTED")
-        - set(attributes["name"], hash(attributes["name"], "sha256"))
+        statements:
+          - delete(attributes["category"])
+          - set(attributes["id"], "REDACTED")
+          - set(attributes["name"], hash(attributes["name"], "sha256"))
         # - set(attributes["user.phone"], concat("XXXX-XXXX-", substring(attributes["user.phone"], length(attributes["user.phone"]) - 4, 4)))
 
 extensions:
@@ -195,7 +195,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [batch]
+      processors: [transform]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
