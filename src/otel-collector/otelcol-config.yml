@@ -132,15 +132,12 @@ exporters:
 
 processors:
   batch:
-  transform:
-    error_mode: ignore
+  transform/hash_attributes:
     log_statements:
       - context: log
-        statements:
-          - set(attributes["id"], nil) # Redaction
-          - set(attributes["host.name"], "REDACTED") # Replacement
-
-
+      statements:
+        # Hash user.id with sha256
+        - set(attributes["host.name"], hash(attributes["host.name"], "sha256"))
 extensions:
   health_check:
     endpoint: 0.0.0.0:13133
@@ -162,7 +159,7 @@ service:
       exporters: [otlp, otlphttp]
     logs:
       receivers: [otlp]
-      processors: [transform]
+      processors: [transform/hash_attributes]
       exporters: [otlp, otlphttp]
   telemetry:
     metrics:
