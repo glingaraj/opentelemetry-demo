@@ -137,7 +137,7 @@ processors:
       - context: log
         statements:
           # Hash user.id with sha256
-          - set(attributes["host.name"], Hash(attributes["host.name"], "sha256"))
+          - set(attributes["host.name"], HASH(attributes["host.name"], "sha256"))
 extensions:
   health_check:
     endpoint: 0.0.0.0:13133
